@@ -1,5 +1,4 @@
 from ninja import Schema
-from pydantic import model_validator
 
 
 class UpdateAuthenticatedUserRequest(Schema):

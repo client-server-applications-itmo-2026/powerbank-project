@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class DomainError(Exception):
 
     def __init__(self, msg: str, **context) -> None:

@@ -54,4 +54,3 @@ def register_user(data: RegisterUserRequest) -> UserModel:
     )
 
     return UserModel.objects.create_user(**data.model_dump(exclude_unset=True))
-
