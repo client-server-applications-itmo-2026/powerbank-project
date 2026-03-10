@@ -1,5 +1,4 @@
 ---
-
 # This file is required to bind ports in development,
 # since binding ports in regular compose file will ruin scaling
 # in production. Due to how `ports` directive is merged with two files.
@@ -22,3 +21,8 @@ services:
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
+
+  db:
+    ports:
+      # We only bind ports directly in development:
+      - "5432:5432"

@@ -10,18 +10,12 @@ import logging
 import socket
 from typing import TYPE_CHECKING
 
-from debug_toolbar.settings import PANELS_DEFAULTS
 
 from server.settings.components import config
 from server.settings.components.common import (
     DATABASES,
     INSTALLED_APPS,
     MIDDLEWARE,
-)
-from server.settings.components.csp import (
-    CSP_CONNECT_SRC,
-    CSP_IMG_SRC,
-    CSP_SCRIPT_SRC,
 )
 
 if TYPE_CHECKING:
@@ -43,9 +37,6 @@ ALLOWED_HOSTS = [
 # Installed apps for development only:
 
 INSTALLED_APPS += (
-    # Better debug:
-    'debug_toolbar',
-    'zeal',
     # Linting migrations:
     'django_migration_linter',
     # django-test-migrations:
@@ -69,7 +60,6 @@ INSTALLED_APPS += (
 # https://django-debug-toolbar.readthedocs.io
 
 MIDDLEWARE += (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     # https://github.com/conformist-mw/django-query-counter
     # Prints how many queries were executed, useful for the APIs.
     'query_counter.middleware.DjangoQueryCounterMiddleware',
@@ -92,36 +82,12 @@ def _custom_show_toolbar(request: HttpRequest) -> bool:
 
 
 # This can be removed after `RedirectsPanel` will be gone:
-DEBUG_TOOLBAR_PANELS = PANELS_DEFAULTS.copy()
-DEBUG_TOOLBAR_PANELS.remove('debug_toolbar.panels.redirects.RedirectsPanel')
-
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': (
-        'server.settings.environments.development._custom_show_toolbar'
-    ),
-}
-
-# This will make debug toolbar to work with django-csp,
-# since `ddt` loads some scripts from `ajax.googleapis.com`:
-CSP_SCRIPT_SRC += ('ajax.googleapis.com',)
-CSP_IMG_SRC += ('data:',)
-CSP_CONNECT_SRC += ("'self'",)
-
 
 # django-zeal
 # https://github.com/taobojlen/django-zeal
 
 # Should be the first in line:
 MIDDLEWARE = ('zeal.middleware.zeal_middleware', *MIDDLEWARE)
-
-# Logging N+1 requests:
-ZEAL_RAISE = True  # comment out if you want to allow N+1 requests
-ZEAL_SHOW_ALL_CALLERS = True
-ZEAL_LOGGER = logging.getLogger('django')
-ZEAL_ALLOWLIST = [
-    {'model': 'admin.*'},
-]
-
 
 # django-test-migrations
 # https://github.com/wemake-services/django-test-migrations

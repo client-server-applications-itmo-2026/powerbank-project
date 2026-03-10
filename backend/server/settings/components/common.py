@@ -31,8 +31,6 @@ INSTALLED_APPS: tuple[str, ...] = (
     # django-admin:
     'django.contrib.admin',
     'django.contrib.admindocs',
-    # Security:
-    'axes',
     # Health checks:
     # You may want to enable other checks as well,
     # see: https://github.com/KristianOellegaard/django-health-check
@@ -42,8 +40,6 @@ INSTALLED_APPS: tuple[str, ...] = (
 MIDDLEWARE: tuple[str, ...] = (
     # Logging:
     'server.settings.components.logging.LoggingContextVarsMiddleware',
-    # Content Security Policy:
-    'csp.middleware.CSPMiddleware',
     # Django:
     'django.middleware.security.SecurityMiddleware',
     # django-permissions-policy
@@ -55,8 +51,6 @@ MIDDLEWARE: tuple[str, ...] = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Axes:
-    'axes.middleware.AxesMiddleware',
 )
 
 ROOT_URLCONF = 'server.urls'
