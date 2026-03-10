@@ -6,7 +6,6 @@ SECURITY WARNING: don't run with debug turned on in production!
 
 from __future__ import annotations
 
-import logging
 import socket
 from typing import TYPE_CHECKING
 
@@ -18,7 +17,7 @@ from server.settings.components.common import (
 )
 
 if TYPE_CHECKING:
-    from django.http import HttpRequest
+    pass
 
 # Setting the development status:
 

@@ -22,6 +22,7 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 INSTALLED_APPS: tuple[str, ...] = (
     # Your apps go here:
     "server.apps.main",
+    "server.apps.users",
     # Default django apps:
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -151,7 +152,6 @@ MEDIA_ROOT = BASE_DIR.joinpath("media")
 # https://docs.djangoproject.com/en/5.2/topics/auth/
 
 AUTHENTICATION_BACKENDS = (
-    "axes.backends.AxesBackend",
     "django.contrib.auth.backends.ModelBackend",
 )
 
@@ -184,3 +184,6 @@ PERMISSIONS_POLICY: dict[str, str | list[str]] = {}
 # https://docs.djangoproject.com/en/5.2/ref/settings/#std:setting-EMAIL_TIMEOUT
 
 EMAIL_TIMEOUT = 5
+
+# Django auth
+AUTH_USER_MODEL = "users.UserModel"
