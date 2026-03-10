@@ -1,7 +1,7 @@
 from ninja import Router
 
 from .logic import functions as domain_functions
-from .logic.request_schemas import UpdateAuthenticatedUserSchema
+from .logic.request_schemas import RegisterUserRequest, UpdateAuthenticatedUserSchema
 from .logic.response_schemas import UserRetrieveResponse
 
 router = Router()
@@ -16,3 +16,8 @@ def get_me(request) -> UserRetrieveResponse:
 def update_me(request, data: UpdateAuthenticatedUserSchema):
     updated_user = domain_functions.update_user(data, request.auth)
     return UserRetrieveResponse.model_validate(updated_user)
+
+
+@router.post("/register", auth=None, response=UserRetrieveResponse)
+def register_user(request, data: RegisterUserRequest):
+    return domain_functions.register_user(data)
