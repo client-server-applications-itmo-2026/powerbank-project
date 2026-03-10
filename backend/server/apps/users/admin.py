@@ -11,3 +11,16 @@ class UserModelAdmin(BaseUserAdmin):
     search_fields = ("email",)
     ordering = ("id",)
     fieldsets = ()
+    fields = (
+        "email",
+        "password",
+        "is_staff",
+        "is_active",
+        "is_stantion_admin",
+        "patronymic_name",
+        "phone_number",
+    )
+    exclude = ()
+    add_fieldsets = (
+        (None, {"classes": ("wide",), "fields": ("email", "password1", "password2")}),
+    )

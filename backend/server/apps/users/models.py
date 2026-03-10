@@ -35,6 +35,8 @@ class UserModelManager(_UserManager):
         return user
 
 
+# Использование зависимости от системы пользователей джанго назову не тех долгом
+# а вынужденным трейдоффом, из-за сжатых сроков :)
 @final
 class UserModel(AbstractUser):
 

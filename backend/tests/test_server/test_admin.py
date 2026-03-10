@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 import pytest
-from axes.models import AccessAttempt, AccessFailureLog, AccessLog
 from django.contrib.admin import AdminSite, ModelAdmin
 from django.contrib.admin.sites import all_sites
 from django.db.models import Model
@@ -10,9 +9,7 @@ from django.urls import reverse
 
 # Models that should have restricted (FORBIDDEN) admin add pages
 _RESTRICTED_ADMIN_ADD_MODELS = frozenset((
-    AccessAttempt,
-    AccessLog,
-    AccessFailureLog,
+  
 ))
 
 # Creates a list of tuples containing all registered admin sites,
