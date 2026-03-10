@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 class UserModelManager(_UserManager):
 
+    @override
     def create_user(
         self, email: str, password: str | None = None, **extra_fields: Any
     ) -> "UserModel":
@@ -16,6 +17,7 @@ class UserModelManager(_UserManager):
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
 
+    @override
     def create_superuser(
         self, email: str, password: str | None = None, **extra_fields: Any
     ) -> "UserModel":

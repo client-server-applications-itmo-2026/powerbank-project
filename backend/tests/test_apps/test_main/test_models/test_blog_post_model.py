@@ -15,5 +15,5 @@ class TestBlogPost(django.TestCase):
         """Tests that instance can be saved and has correct representation."""
         instance.save()
 
-        assert instance.id > 0
+        assert instance.id > 0  # type: ignore
         assert len(str(instance)) <= 20

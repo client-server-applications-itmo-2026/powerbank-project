@@ -9,8 +9,7 @@ This examples uses Django's default media
 files serving technique in development.
 """
 
-from pydoc import doc
-
+from common.auth import BasicAuth
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admindocs import urls as admindocs_urls
@@ -29,6 +28,7 @@ django_ninja_api = NinjaAPI(
     title="Powerbank API",
     description="API for Powerbank project",
     docs=Redoc(),
+    auth=BasicAuth(),
 )
 # TODO: add API routers here
 

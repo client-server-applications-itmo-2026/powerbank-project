@@ -1,5 +1,14 @@
 {
     "python.testing.pytestArgs": [],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "files.associations": {
+        ".env*": "dotenv",
+        ".venv/**": "venv"
+    },
+    "github.copilot.enable": {
+        "*": true,
+        "dotenv": false,
+        "venv": false
+    }
 }
