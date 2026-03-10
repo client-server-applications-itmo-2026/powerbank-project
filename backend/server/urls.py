@@ -9,25 +9,24 @@ This examples uses Django's default media
 files serving technique in development.
 """
 
-from common.auth import BasicAuth
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admindocs import urls as admindocs_urls
 from django.urls import include, path
 from django.views.generic import TemplateView
 from health_check.views import HealthCheckView
-from ninja import NinjaAPI, Redoc
+from ninja import NinjaAPI
 
 from server.apps.main import urls as main_urls
 from server.apps.main.views import index
 from server.apps.users.api import router as users_router
+from server.common.auth import BasicAuth
 
 admin.autodiscover()
 django_ninja_api = NinjaAPI(
-    docs_url="/api/docs/",
+    docs_url="/docs/",
     title="Powerbank API",
     description="API for Powerbank project",
-    docs=Redoc(),
     auth=BasicAuth(),
 )
 # TODO: add API routers here
