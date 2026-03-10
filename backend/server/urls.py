@@ -23,41 +23,41 @@ admin.autodiscover()
 
 urlpatterns = [
     # Apps:
-    path('main/', include(main_urls, namespace='main')),
+    path("main/", include(main_urls, namespace="main")),
     # Health checks:
     path(
-        'health/',
+        "health/",
         HealthCheckView.as_view(
             checks=[
-                'health_check.Cache',
-                'health_check.Database',
-                'health_check.Storage',
+                "health_check.Cache",
+                "health_check.Database",
+                "health_check.Storage",
             ]
         ),
-        name='health_check',
+        name="health_check",
     ),
     # django-admin:
-    path('admin/doc/', include(admindocs_urls)),
-    path('admin/', admin.site.urls),
+    path("admin/doc/", include(admindocs_urls)),
+    path("admin/", admin.site.urls),
     # Text and xml static files:
     path(
-        'robots.txt',
+        "robots.txt",
         TemplateView.as_view(
-            template_name='common/txt/robots.txt',
-            content_type='text/plain',
+            template_name="common/txt/robots.txt",
+            content_type="text/plain",
         ),
-        name='robots_txt',
+        name="robots_txt",
     ),
     path(
-        'humans.txt',
+        "humans.txt",
         TemplateView.as_view(
-            template_name='common/txt/humans.txt',
-            content_type='text/plain',
+            template_name="common/txt/humans.txt",
+            content_type="text/plain",
         ),
-        name='humans_txt',
+        name="humans_txt",
     ),
     # It is a good practice to have explicit index view:
-    path('', index, name='index'),
+    path("", index, name="index"),
 ]
 if settings.DEBUG:  # pragma: no cover
     from django.conf.urls.static import static

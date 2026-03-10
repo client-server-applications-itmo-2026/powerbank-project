@@ -88,7 +88,7 @@ target-version = "py313"
 line-length = 80
 
 [tool.ruff.format]
-quote-style = "single"
+quote-style = "double"
 docstring-code-format = true
 
 [tool.ruff.lint]
@@ -157,7 +157,7 @@ ignore = [
 external = ["WPS"]
 
 # Plugin configs:
-flake8-quotes.inline-quotes = "single"
+flake8-quotes.inline-quotes = "double"
 mccabe.max-complexity = 6
 pydocstyle.convention = "google"
 
