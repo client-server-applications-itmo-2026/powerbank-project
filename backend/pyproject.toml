@@ -140,7 +140,7 @@ ignore = [
   # Different doc rules that we don't really care about:
   "D100",
   "D205",
-  "RUF002,
+  "RUF002",
   "D102",
   "D101",
   "D103",

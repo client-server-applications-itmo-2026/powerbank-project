@@ -5,7 +5,9 @@ from django.contrib.gis.measure import Distance
 from django.db import transaction
 from django.db.models import F, Prefetch, Window
 from django.db.models import functions as db_functions
+from structlog import getLogger
 
+from server.apps.rentals.logic import public as rentals_public_logic
 from server.apps.stantions.logic.request_schemas import (
     AcceptStantionTaskRequest,
     CreateStantionHeartBeatRequest,
@@ -32,6 +34,8 @@ from server.apps.stantions.models import (
 )
 from server.common.exceptions import DomainError
 
+logger = getLogger(__name__)
+
 
 @transaction.atomic
 def create_stantion_hearbeat(
@@ -39,6 +43,7 @@ def create_stantion_hearbeat(
 ) -> StantionHeartBeatModel:
 
     # Каюсь, грешил. Но бля... С каким удовольствием
+    # я бы с радостью сделал по-людски, но не за 3 дня ;)
     stantion_instance, _ = RegisteredStantionModel.objects.get_or_create(
         hardware_id=data.stantion_info.hardware_id,
         defaults={
@@ -229,46 +234,52 @@ def accept_stantion_task(data: AcceptStantionTaskRequest) -> StantionTaskModel:
     return task_instance
 
 
-@transaction.atomic
 def complete_stantion_task(data: CreateStantionTaskResultRequest) -> StantionTaskModel:
-    task_qs = StantionTaskModel.objects.filter(
-        id=data.task_id,
-        to_stantion_id=data.hardware_id,
-        status=TaskStatusEnum.ACCEPTED,
-    ).select_for_update()
+    with transaction.atomic():
+        task_qs = StantionTaskModel.objects.filter(
+            id=data.task_id,
+            to_stantion_id=data.hardware_id,
+            status=TaskStatusEnum.ACCEPTED,
+        ).select_for_update()
 
-    task_instance = task_qs.first()
-    if task_instance is None:
-        raise DomainError("Task not found or not in ACCEPTED status")
+        task_instance = task_qs.first()
+        if task_instance is None:
+            raise DomainError("Task not found or not in ACCEPTED status")
 
-    # Тут можно было бы по-хорошему еще проверять, что результат соответствует типу задачи
-    task_instance.status = TaskStatusEnum.COMPLETED
+        # Тут можно было бы по-хорошему еще проверять, что результат соответствует типу задачи
+        task_instance.status = TaskStatusEnum.COMPLETED
 
-    # А тут придумать велосипед для более элегантного сохранения результата
-    # Но мне за это не платят, так что пох+пох
-    if isinstance(data.result, ReleaseBatteryTaskResult):
-        task_instance.response_release_battery_success = data.result.success
-        task_instance.response_release_battery_error = data.result.error or ""
-    elif isinstance(data.result, ReceiveBatteryTaskResult):
-        task_instance.response_receive_battery_success = data.result.success
-        task_instance.response_receive_battery_error = data.result.error or ""
+        # А тут придумать велосипед для более элегантного сохранения результата
+        # Но мне за это не платят, так что пох+пох
+        if isinstance(data.result, ReleaseBatteryTaskResult):
+            task_instance.response_release_battery_success = data.result.success
+            task_instance.response_release_battery_error = data.result.error or ""
+        elif isinstance(data.result, ReceiveBatteryTaskResult):
+            task_instance.response_receive_battery_success = data.result.success
+            task_instance.response_receive_battery_error = data.result.error or ""
 
-        if data.result.received_battery is not None:
-            battery_instance, _ = RegisteredBatteryModel.objects.get_or_create(
-                hardware_id=data.result.received_battery.hardware_id,
-                defaults={
-                    "battery_type_id": data.result.received_battery.model_name,
-                },
-            )
-            task_instance.response_release_battery_battery = battery_instance
+            if data.result.received_battery is not None:
+                battery_instance, _ = RegisteredBatteryModel.objects.get_or_create(
+                    hardware_id=data.result.received_battery.hardware_id,
+                    defaults={
+                        "battery_type_id": data.result.received_battery.model_name,
+                    },
+                )
+                task_instance.response_release_battery_battery = battery_instance
 
-    if not any(
-        [
-            task_instance.response_release_battery_success,
-            task_instance.response_receive_battery_success,
-        ]
-    ):
-        task_instance.status = TaskStatusEnum.FAILED
+        if not any(
+            [
+                task_instance.response_release_battery_success,
+                task_instance.response_receive_battery_success,
+            ]
+        ):
+            task_instance.status = TaskStatusEnum.FAILED
 
-    task_instance.save()
+        task_instance.save()
+
+    # Подписчик-продюсер для бедных
+    try:
+        rentals_public_logic.handle_complete_success_task(task_instance)
+    except Exception as e:
+        logger.exception("Error during notifying rental about task completion: %s", e)
     return task_instance

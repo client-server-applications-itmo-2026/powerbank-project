@@ -12,9 +12,22 @@ class TariffModel(models.Model):
     name = models.CharField(max_length=255, unique=True)
     price_per_tick = models.PositiveIntegerField(null=True)
     description = models.TextField(blank=True)
+    tariff_type = models.CharField(
+        max_length=255,
+        choices=TarrifTypeEnum.choices,
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+
+class RentalStatusEnum(models.TextChoices):
+    INITIALIZING = "INITIALIZING", "Initializing"
+    ACTIVE = "ACTIVE", "Active"
+    WAIT_FOR_COMPLETION = "WAIT_FOR_COMPLETION", "Wait for completion"
+    COMPLETED = "COMPLETED", "Completed"
+    CANCELLED = "CANCELLED", "Cancelled"
 
 
 class RentalModel(models.Model):
@@ -46,9 +59,24 @@ class RentalModel(models.Model):
         blank=True,
     )
 
+    related_release_task = models.ForeignKey(
+        "stantions.StantionTaskModel",
+        on_delete=models.SET_NULL,
+        related_name="rental",
+        null=True,
+        blank=True,
+    )
+    related_accept_task = models.ForeignKey(
+        "stantions.StantionTaskModel",
+        on_delete=models.SET_NULL,
+        related_name="rental_accept",
+        null=True,
+        blank=True,
+    )
+
     final_price = models.PositiveIntegerField(null=True, blank=True)
 
-    status = models.CharField(max_length=255)
+    status = models.CharField(max_length=255, choices=RentalStatusEnum.choices)
 
     started_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)

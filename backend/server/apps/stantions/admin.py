@@ -1,13 +1,14 @@
 from django.contrib import admin
 from django.contrib.gis.admin import GISModelAdmin
+
 from .models import (
-    StantionTypeModel,
     BatteryTypeModel,
+    HeartBeatSlotStateModel,
     RegisteredBatteryModel,
     RegisteredStantionModel,
     StantionHeartBeatModel,
-    HeartBeatSlotStateModel,
     StantionTaskModel,
+    StantionTypeModel,
 )
 
 
@@ -85,4 +86,3 @@ class StantionTaskAdmin(admin.ModelAdmin):
     )
     search_fields = ("id",)
     list_filter = ("task_type", "status", "created_at", "expiring_after")
-

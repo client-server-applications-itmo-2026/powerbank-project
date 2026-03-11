@@ -1,6 +1,8 @@
 from django.contrib.gis.db import models as gis_models
 from django.db import models
 
+from server.common.name_generator import HyphenNameGenerator
+
 
 class StantionTypeModel(models.Model):
     name = models.CharField(
@@ -63,7 +65,10 @@ class RegisteredStantionModel(models.Model):
         geography=True,
     )
 
-    name = models.CharField(max_length=255)
+    name = models.CharField(
+        max_length=255,
+        default=HyphenNameGenerator(),
+    )
 
     is_active = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)

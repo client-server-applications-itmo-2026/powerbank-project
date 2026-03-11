@@ -13,6 +13,10 @@ class Point(Schema):
     def as_geo_point(self) -> GeoPoint:
         return GeoPoint(self.lon, self.lat, srid=4326)
 
+    @staticmethod
+    def from_geo_point(geo_point: GeoPoint) -> "Point":
+        return Point(lat=geo_point.y, lon=geo_point.x)
+
 
 class RegisterStantionRequest(Schema):
     stantion_type_name: str

@@ -185,7 +185,7 @@ class TestCreateStantionHeartbeat:
         result = create_stantion_hearbeat(data)
 
         assert isinstance(result, StantionHeartBeatModel)
-        assert result.registered_stantion_id == "hw-001" # type: ignore
+        assert result.registered_stantion_id == "hw-001"  # type: ignore
 
     def test_creates_stantion_when_not_exists(
         self, stantion_type: StantionTypeModel
@@ -253,7 +253,7 @@ class TestCreateStantionHeartbeat:
         result = create_stantion_hearbeat(data)
 
         slot = HeartBeatSlotStateModel.objects.get(heartbeat=result)
-        assert slot.registered_battery_id == "bat-001" # type: ignore
+        assert slot.registered_battery_id == "bat-001"  # type: ignore
 
     def test_creates_empty_slot_state(
         self, stantion: RegisteredStantionModel
