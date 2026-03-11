@@ -3,7 +3,7 @@ from uuid import UUID
 from django.contrib.gis.geos import Point as GeoPoint
 from ninja import Schema
 
-from server.apps.stantions.models import SlotStateEnum, TaskStatusEnum, TaskTypeEnum
+from server.apps.stantions.models import SlotStateEnum
 
 
 class Point(Schema):

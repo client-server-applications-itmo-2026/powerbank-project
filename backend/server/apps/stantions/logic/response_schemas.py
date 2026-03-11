@@ -35,5 +35,5 @@ class StantionTaskInfo(Schema):
         return cls(
             task_id=task_instance.id,
             task_type=task_instance.task_type_enum,
-            payload_release_battery_hardware_id=task_instance.payload_release_battery_id,
+            payload_release_battery_hardware_id=task_instance.payload_release_battery_id,  # type: ignore
         )
