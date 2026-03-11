@@ -1,3 +1,4 @@
+from django.contrib.gis.db import models as gis_models
 from django.db import models
 
 
@@ -40,8 +41,11 @@ class RegisteredStantionModel(models.Model):
         on_delete=models.PROTECT,
         related_name="stantions",
     )
-    # TODO: Подключить django.contrib.gis и юзать PointField для хранения координат, а не текстовое поле
-    location = models.CharField(max_length=255)
+    location = gis_models.PointField(
+        spatial_index=True,
+        geography=True,
+    )
+
     name = models.CharField(max_length=255)
     hardware_id = models.CharField(max_length=255, unique=True)
 
@@ -61,7 +65,7 @@ class StantionHeartBeatModel(models.Model):
     created_at = models.DateTimeField(auto_now=True)
 
 
-class SlotStateEnum(models.CharField):
+class SlotStateEnum(models.TextChoices):
     charged = "charged"
     charging = "charging"
     empty = "empty"
@@ -96,6 +100,7 @@ class StantionTaskModel(models.Model):
         on_delete=models.PROTECT,
         null=True,
         blank=True,
+        related_name="payload_release_battery_tasks",
     )
     response_release_battery_error = models.TextField(blank=True)
     response_release_battery_success = models.BooleanField(null=True)
@@ -108,6 +113,7 @@ class StantionTaskModel(models.Model):
         on_delete=models.PROTECT,
         null=True,
         blank=True,
+        related_name="payload_receive_battery_tasks",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

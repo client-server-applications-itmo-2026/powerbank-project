@@ -26,6 +26,7 @@ _base_settings = (
     "components/common.py",
     "components/logging.py",
     "components/caches.py",
+    "components/gis.py",
     # Select the right env:
     f"environments/{_ENV}.py",
     # Optionally override some settings:

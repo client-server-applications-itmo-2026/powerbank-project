@@ -23,6 +23,8 @@ INSTALLED_APPS: tuple[str, ...] = (
     # Your apps go here:
     "server.apps.main",
     "server.apps.users",
+    "server.apps.stantions",
+    "server.apps.rentals",
     # Default django apps:
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -32,6 +34,8 @@ INSTALLED_APPS: tuple[str, ...] = (
     # django-admin:
     "django.contrib.admin",
     "django.contrib.admindocs",
+    # django-gis:
+    "django.contrib.gis",
     # Health checks:
     # You may want to enable other checks as well,
     # see: https://github.com/KristianOellegaard/django-health-check
@@ -64,7 +68,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": config("POSTGRES_DB"),
         "USER": config("POSTGRES_USER"),
         "PASSWORD": config("POSTGRES_PASSWORD"),
