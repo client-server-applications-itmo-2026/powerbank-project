@@ -9,7 +9,6 @@ This examples uses Django's default media
 files serving technique in development.
 """
 
-
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admindocs import urls as admindocs_urls
@@ -20,6 +19,7 @@ from ninja import NinjaAPI
 
 from server.apps.main import urls as main_urls
 from server.apps.main.views import index
+from server.apps.stantions.api import router as stantions_router
 from server.apps.users.api import router as users_router
 from server.common.auth import BasicAuth
 from server.common.exceptions import DomainError
@@ -34,6 +34,7 @@ django_ninja_api = NinjaAPI(
 # TODO: add API routers here
 
 django_ninja_api.add_router("", users_router)
+django_ninja_api.add_router("", stantions_router)
 
 
 @django_ninja_api.exception_handler(DomainError)

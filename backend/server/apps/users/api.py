@@ -1,7 +1,10 @@
 from ninja import Router
 
 from .logic import functions as domain_functions
-from .logic.request_schemas import RegisterUserRequest, UpdateAuthenticatedUserRequest
+from .logic.request_schemas import (
+    RegisterUserRequest,
+    UpdateAuthenticatedUserRequest,
+)
 from .logic.response_schemas import UserRetrieveResponse
 
 router = Router()

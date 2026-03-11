@@ -66,17 +66,17 @@ def _moscow_point() -> Point:
 # ---------------------------------------------------------------------------
 
 
-@pytest.fixture()
+@pytest.fixture
 def stantion_type(db) -> StantionTypeModel:
     return StantionTypeModel.objects.create(name="v1", max_slots=4)
 
 
-@pytest.fixture()
+@pytest.fixture
 def battery_type(db) -> BatteryTypeModel:
     return BatteryTypeModel.objects.create(name="bat-v1")
 
 
-@pytest.fixture()
+@pytest.fixture
 def stantion(stantion_type) -> RegisteredStantionModel:
     return RegisteredStantionModel.objects.create(
         hardware_id="hw-001",
@@ -86,7 +86,7 @@ def stantion(stantion_type) -> RegisteredStantionModel:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def battery(battery_type) -> RegisteredBatteryModel:
     return RegisteredBatteryModel.objects.create(
         hardware_id="bat-001",
@@ -94,7 +94,7 @@ def battery(battery_type) -> RegisteredBatteryModel:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def created_task(stantion) -> StantionTaskModel:
     return StantionTaskModel.objects.create(
         id=uuid.uuid4(),
@@ -105,7 +105,7 @@ def created_task(stantion) -> StantionTaskModel:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def reserved_task(stantion) -> StantionTaskModel:
     return StantionTaskModel.objects.create(
         id=uuid.uuid4(),
@@ -116,7 +116,7 @@ def reserved_task(stantion) -> StantionTaskModel:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def accepted_task(stantion) -> StantionTaskModel:
     return StantionTaskModel.objects.create(
         id=uuid.uuid4(),
@@ -147,7 +147,7 @@ class TestCreateTask:
 
 
 @final
-@pytest.mark.django_db()
+@pytest.mark.django_db
 class TestRegisterStantion:
     def test_creates_stantion_in_db(self, stantion_type: StantionTypeModel) -> None:
         data = RegisterStantionRequest(
@@ -168,7 +168,7 @@ class TestRegisterStantion:
 
 
 @final
-@pytest.mark.django_db()
+@pytest.mark.django_db
 class TestCreateStantionHeartbeat:
     def test_creates_heartbeat_for_existing_stantion(
         self, stantion: RegisteredStantionModel
@@ -315,7 +315,7 @@ class TestCreateStantionHeartbeat:
 
 
 @final
-@pytest.mark.django_db()
+@pytest.mark.django_db
 class TestGetNearestStantions:
     def test_returns_active_stantion(
         self, stantion: RegisteredStantionModel
@@ -461,7 +461,7 @@ class TestGetNearestStantions:
 
 
 @final
-@pytest.mark.django_db()
+@pytest.mark.django_db
 class TestPullStantionTask:
     def test_returns_created_task_and_sets_reserved(
         self, created_task: StantionTaskModel
@@ -493,7 +493,7 @@ class TestPullStantionTask:
 
 
 @final
-@pytest.mark.django_db()
+@pytest.mark.django_db
 class TestAcceptStantionTask:
     def test_accepts_reserved_task(
         self, reserved_task: StantionTaskModel
@@ -538,7 +538,7 @@ class TestAcceptStantionTask:
 
 
 @final
-@pytest.mark.django_db()
+@pytest.mark.django_db
 class TestCompleteStantionTask:
     def test_completes_release_battery_task_success(
         self, accepted_task: StantionTaskModel

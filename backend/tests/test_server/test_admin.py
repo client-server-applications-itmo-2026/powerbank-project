@@ -9,7 +9,7 @@ from django.urls import reverse
 
 # Models that should have restricted (FORBIDDEN) admin add pages
 _RESTRICTED_ADMIN_ADD_MODELS = frozenset((
-  
+
 ))
 
 # Creates a list of tuples containing all registered admin sites,

@@ -1,5 +1,4 @@
-import textwrap
-from typing import Any, ClassVar, Final, final, override
+from typing import Any, ClassVar, final, override
 
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as _UserManager

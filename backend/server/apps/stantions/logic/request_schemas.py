@@ -83,3 +83,22 @@ class RetrieveNearestStantionsRequest(Schema):
     radius_meters: int = 2000
     limit: int = 100
     offset: int = 0
+
+
+class RetrieveNearestStantionsQueryParams(Schema):
+    lat: float | None = None
+    lon: float | None = None
+    radius_meters: int = 2000
+    limit: int = 100
+    offset: int = 0
+
+    def as_request(self) -> RetrieveNearestStantionsRequest:
+        location = None
+        if self.lat is not None and self.lon is not None:
+            location = Point(lat=self.lat, lon=self.lon)
+        return RetrieveNearestStantionsRequest(
+            location=location,
+            radius_meters=self.radius_meters,
+            limit=self.limit,
+            offset=self.offset,
+        )
