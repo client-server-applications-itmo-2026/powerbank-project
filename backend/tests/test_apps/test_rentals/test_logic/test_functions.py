@@ -201,6 +201,12 @@ class TestRetrieveRentalsByUser:
         result = retrieve_rentals_by_user(user)
 
         assert result.count() == 2
+    def test_returns_queryset(self, user: UserModel) -> None:
+        result = retrieve_rentals_by_user(user)
+    
+        from django.db.models.query import QuerySet
+    
+        assert isinstance(result, QuerySet)
 
 
 # ---------------------------------------------------------------------------
