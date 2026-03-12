@@ -378,6 +378,23 @@ class TestStartRental:
         with pytest.raises(DomainError, match="No charged batteries"):
             start_rental(user, data)
 
+    def test_creates_single_rental_record(
+        self,
+        user: UserModel,
+        stantion: RegisteredStantionModel,
+        battery: RegisteredBatteryModel,
+        tariff: TariffModel,
+        heartbeat_with_charged_battery: StantionHeartBeatModel,
+    ) -> None:
+        data = StartRentalRequest(
+            stantion_id=stantion.hardware_id,
+            tariff_id=tariff.id,
+        )
+    
+        start_rental(user, data)
+    
+        assert RentalModel.objects.count() == 1
+
 # ---------------------------------------------------------------------------
 # Tests: complete_rental
 # ---------------------------------------------------------------------------
@@ -453,3 +470,34 @@ class TestCompleteRental:
 
         with pytest.raises(RegisteredStantionModel.DoesNotExist):
             complete_rental(user, data)
+
+    def test_final_price_is_calculated(
+        self,
+        user: UserModel,
+        active_rental: RentalModel,
+        stantion: RegisteredStantionModel,
+    ) -> None:
+        data = CompleteRentalRequest(
+            rental_id=active_rental.id,
+            stantion_id=stantion.hardware_id,
+        )
+    
+        result = complete_rental(user, data)
+    
+        assert result.final_price is not None
+        assert result.final_price > 0
+
+    def test_status_changes_after_completion(
+        self,
+        user: UserModel,
+        active_rental: RentalModel,
+        stantion: RegisteredStantionModel,
+    ) -> None:
+        data = CompleteRentalRequest(
+            rental_id=active_rental.id,
+            stantion_id=stantion.hardware_id,
+        )
+    
+        result = complete_rental(user, data)
+    
+        assert result.status == RentalStatusEnum.WAIT_FOR_COMPLETION
