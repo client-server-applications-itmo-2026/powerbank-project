@@ -132,6 +132,8 @@ class TestRetrieveMyRentals:
         response = client.get("/api/me/rentals")
         assert response.status_code == HTTPStatus.UNAUTHORIZED
 
+   
+
 
 @final
 @pytest.mark.django_db
@@ -225,6 +227,23 @@ class TestStartRental:
         )
     
         assert response.status_code in (HTTPStatus.NOT_FOUND, HTTPStatus.FORBIDDEN)
+
+    def test_response_contains_rental_id(
+        self,
+        client: Client,
+        user: UserModel,
+        stantion_with_charged_battery: RegisteredStantionModel,
+        tariff: TariffModel,
+    ) -> None:
+        response = client.post(
+            "/api/start-rental",
+            data={"stantion_id": "hw-001", "tariff_id": tariff.id},
+            content_type="application/json",
+            HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
+        )
+    
+        assert response.status_code == HTTPStatus.OK
+        assert "id" in response.json()
 
 
 @final
