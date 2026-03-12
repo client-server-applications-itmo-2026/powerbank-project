@@ -258,6 +258,13 @@ class TestCountPrice:
         with pytest.raises(DomainError, match="Unknown tariff type"):
             count_price(tariff, datetime.timedelta(hours=1))
 
+    def test_per_minute_tariff_zero_duration(self) -> None:
+        tariff = TariffModel(price_per_tick=10, tariff_type=TarrifTypeEnum.PER_MINUTE)
+    
+        result = count_price(tariff, datetime.timedelta())
+    
+        assert result == 10 # duration = 0
+
 
 # ---------------------------------------------------------------------------
 # Tests: start_rental
