@@ -404,6 +404,24 @@ class TestCompleteRental:
         with pytest.raises(RentalModel.DoesNotExist):
             complete_rental(user, data)
 
+    def test_user_cannot_complete_rental_of_another_user(
+        self,
+        active_rental: RentalModel,
+        stantion: RegisteredStantionModel,
+    ) -> None:
+        other_user = UserModel.objects.create_user(
+            email="other@example.com",
+            password="pass",
+        )
+    
+        data = CompleteRentalRequest(
+            rental_id=active_rental.id,
+            stantion_id=stantion.hardware_id,
+        )
+    
+        with pytest.raises(DomainError):
+            complete_rental(other_user, data)
+
     def test_raises_when_completion_stantion_not_found(
         self,
         user: UserModel,
