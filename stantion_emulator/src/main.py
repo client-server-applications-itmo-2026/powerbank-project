@@ -162,13 +162,13 @@ class StantionEmulatorApp:
         )
 
         ttk.Label(r1, text="Широта:").pack(side=tk.LEFT)
-        self._lat_var = tk.StringVar(value="55.7558")
+        self._lat_var = tk.StringVar(value="60.0400")
         ttk.Entry(r1, textvariable=self._lat_var, width=10).pack(
             side=tk.LEFT, padx=(3, 8)
         )
 
         ttk.Label(r1, text="Долгота:").pack(side=tk.LEFT)
-        self._lon_var = tk.StringVar(value="37.6173")
+        self._lon_var = tk.StringVar(value="30.2113")
         ttk.Entry(r1, textvariable=self._lon_var, width=10).pack(
             side=tk.LEFT, padx=(3, 14)
         )
