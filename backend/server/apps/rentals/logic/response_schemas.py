@@ -1,3 +1,5 @@
+import datetime
+
 from ninja import Schema
 from pydantic import field_validator
 
@@ -11,8 +13,8 @@ class TarrifSchema(Schema):
     description: str
     is_active: bool
 
-    created_at: str
-    update_at: str
+    created_at: datetime.datetime
+    update_at: datetime.datetime
 
 
 class StantionInfoSchema(Schema):
@@ -28,11 +30,11 @@ class StantionInfoSchema(Schema):
 class RentalSchema(Schema):
     id: int
     user_id: int
-    battery_id: int
+    battery_id: str
     tariff: TarrifSchema
     started_at_stantion: StantionInfoSchema
     completed_at_stantion: StantionInfoSchema | None
     final_price: int | None
 
-    started_at: str
-    completed_at: str | None
+    started_at: datetime.datetime
+    completed_at: datetime.datetime | None

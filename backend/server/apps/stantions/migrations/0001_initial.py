@@ -2,8 +2,9 @@
 
 import django.contrib.gis.db.models.fields
 import django.db.models.deletion
-import server.common.name_generator
 from django.db import migrations, models
+
+import server.common.name_generator
 
 
 class Migration(migrations.Migration):

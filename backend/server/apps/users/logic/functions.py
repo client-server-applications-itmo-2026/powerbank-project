@@ -44,13 +44,17 @@ def register_user(data: RegisterUserRequest) -> UserModel:
         ctx = {"email": data.email}
         raise ProfileAlreadyExistsError(**ctx)
 
-    if UserModel.objects.filter(phone_number=data.phone_number).exists():
+    if data.phone_number and UserModel.objects.filter(
+        phone_number=data.phone_number
+    ).exists():
         ctx = {"phone_number": data.phone_number}
         raise ProfileAlreadyExistsError(**ctx)
 
     creation_data = data.model_dump(exclude_unset=True)
-    creation_data["phone_number"] = _clean_phone_number(
-        phone_number=creation_data["phone_number"]
-    )
+    creation_data.pop("re_password", None)
+    if creation_data.get("phone_number"):
+        creation_data["phone_number"] = _clean_phone_number(
+            phone_number=creation_data["phone_number"]
+        )
 
-    return UserModel.objects.create_user(**data.model_dump(exclude_unset=True))
+    return UserModel.objects.create_user(**creation_data)

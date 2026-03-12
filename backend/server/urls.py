@@ -19,6 +19,7 @@ from ninja import NinjaAPI
 
 from server.apps.main import urls as main_urls
 from server.apps.main.views import index
+from server.apps.rentals.api import router as rentals_router
 from server.apps.stantions.api import router as stantions_router
 from server.apps.users.api import router as users_router
 from server.common.auth import BasicAuth
@@ -35,6 +36,7 @@ django_ninja_api = NinjaAPI(
 
 django_ninja_api.add_router("", users_router)
 django_ninja_api.add_router("", stantions_router)
+django_ninja_api.add_router("", rentals_router)
 
 
 @django_ninja_api.exception_handler(DomainError)

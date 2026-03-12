@@ -1,4 +1,4 @@
-from ninja import Query, Router, responses
+from ninja import Query, Router
 
 from server.apps.stantions.logic import functions as domain_functions
 from server.apps.stantions.logic.request_schemas import (
@@ -68,7 +68,7 @@ def create_stantion_heartbeat(request, data: CreateStantionHeartBeatRequest):
     батарейки в этот слот).
     """
     domain_functions.create_stantion_hearbeat(data)
-    return responses.Response(status=204, data=None)
+    return 204, None
 
 
 @router.post("/register-stantion", response={204: None}, tags=["stantions-lifecycle"])
@@ -79,7 +79,7 @@ def register_stantion(request, data: RegisterStantionRequest):
     станция с таким id уже существует, то возвращаем ошибку.
     """
     domain_functions.register_stantion(data)
-    return responses.Response(status=204, data=None)
+    return 204, None
 
 
 @router.get("/stantions", response=RetrieveNearestStantionsResponse, tags=["stantions"])
