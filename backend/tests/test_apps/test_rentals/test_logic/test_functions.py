@@ -130,6 +130,18 @@ class TestRetrieveRentalById:
     def test_raises_domain_error_when_not_found(self, user: UserModel) -> None:
         with pytest.raises(DomainError, match="does not exist"):
             retrieve_rental_by_id(99999, user)
+    def test_does_not_return_rental_of_other_user(
+        self,
+        active_rental: RentalModel,
+        user: UserModel,
+    ) -> None:
+        other_user = UserModel.objects.create_user(
+            email="other@example.com",
+            password="pass",  # noqa: S106
+        )
+    
+        with pytest.raises(DomainError):
+            retrieve_rental_by_id(active_rental.id, other_user)
 
 
 # ---------------------------------------------------------------------------
