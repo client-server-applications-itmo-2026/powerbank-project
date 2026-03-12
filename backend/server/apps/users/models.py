@@ -40,7 +40,7 @@ class UserModelManager(_UserManager):
 # а вынужденным трейдоффом, из-за сжатых сроков :)
 @final
 class UserModel(AbstractUser):
-
+    id: int
     username = None
     email = models.EmailField(
         _("email address"),

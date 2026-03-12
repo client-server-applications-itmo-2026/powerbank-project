@@ -28,7 +28,7 @@ def retrieve_rental_by_id(rental_id: int, auth_user: UserModel) -> RentalModel:
     try:
         return RentalModel.objects.get(id=rental_id)
     except RentalModel.DoesNotExist:
-        raise DomainError(f"Rental with id {rental_id} does not exist")
+        raise DomainError(f"Rental with id {rental_id} does not exist") from None
 
 
 def retrieve_rentals_by_user(user: UserModel) -> QuerySet[RentalModel]:

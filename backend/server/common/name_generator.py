@@ -141,3 +141,18 @@ class HyphenNameGenerator:
             parts.append(word)
 
         return self.separator.join(parts)
+
+
+def generate_name(
+    min_words: int = 2,
+    max_words: int = 4,
+    unique_against: set[str] | None = None,
+    max_attempts: int = 1000,
+) -> str:
+    generator = HyphenNameGenerator()
+    return generator(
+        min_words=min_words,
+        max_words=max_words,
+        unique_against=unique_against,
+        max_attempts=max_attempts,
+    )

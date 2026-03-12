@@ -9,6 +9,7 @@ class TarrifTypeEnum(models.TextChoices):
 
 
 class TariffModel(models.Model):
+    id: int
     name = models.CharField(max_length=255, unique=True)
     price_per_tick = models.PositiveIntegerField(null=True)
     description = models.TextField(blank=True)
@@ -31,6 +32,7 @@ class RentalStatusEnum(models.TextChoices):
 
 
 class RentalModel(models.Model):
+    id: int
     user = models.ForeignKey(
         "users.UserModel",
         on_delete=models.PROTECT,

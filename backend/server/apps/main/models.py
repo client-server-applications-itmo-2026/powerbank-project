@@ -9,6 +9,7 @@ _POST_TITLE_MAX_LENGTH: Final = 80
 
 @final
 class BlogPost(models.Model):
+    id: int
     """
     This model is used just as an example.
 

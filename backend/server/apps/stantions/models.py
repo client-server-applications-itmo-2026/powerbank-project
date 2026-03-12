@@ -1,10 +1,13 @@
+import uuid
+
 from django.contrib.gis.db import models as gis_models
 from django.db import models
 
-from server.common.name_generator import HyphenNameGenerator
+from server.common.name_generator import generate_name
 
 
 class StantionTypeModel(models.Model):
+    id: int
     name = models.CharField(
         max_length=255,
         unique=True,
@@ -17,6 +20,7 @@ class StantionTypeModel(models.Model):
 
 
 class BatteryTypeModel(models.Model):
+    id: int
     name = models.CharField(
         max_length=255,
         unique=True,
@@ -33,6 +37,7 @@ class BatteryTypeModel(models.Model):
 
 
 class RegisteredBatteryModel(models.Model):
+    id: int
     hardware_id = models.CharField(
         max_length=255,
         unique=True,
@@ -50,6 +55,7 @@ class RegisteredBatteryModel(models.Model):
 
 
 class RegisteredStantionModel(models.Model):
+    id: int
     hardware_id = models.CharField(
         max_length=255,
         unique=True,
@@ -67,7 +73,7 @@ class RegisteredStantionModel(models.Model):
 
     name = models.CharField(
         max_length=255,
-        default=HyphenNameGenerator(),
+        default=generate_name,
     )
 
     is_active = models.BooleanField(default=True)
@@ -128,7 +134,11 @@ class TaskTypeEnum(models.TextChoices):
 
 
 class StantionTaskModel(models.Model):
-    id = models.UUIDField(primary_key=True, editable=False)
+    id = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4,
+    )
     to_stantion = models.ForeignKey(
         RegisteredStantionModel,
         on_delete=models.PROTECT,

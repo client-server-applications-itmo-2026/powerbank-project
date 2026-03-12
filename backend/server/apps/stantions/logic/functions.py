@@ -234,7 +234,9 @@ def accept_stantion_task(data: AcceptStantionTaskRequest) -> StantionTaskModel:
     return task_instance
 
 
-def complete_stantion_task(data: CreateStantionTaskResultRequest) -> StantionTaskModel:
+def complete_stantion_task(  # noqa: C901
+    data: CreateStantionTaskResultRequest,
+) -> StantionTaskModel:
     with transaction.atomic():
         task_qs = StantionTaskModel.objects.filter(
             id=data.task_id,
@@ -281,5 +283,7 @@ def complete_stantion_task(data: CreateStantionTaskResultRequest) -> StantionTas
     try:
         rentals_public_logic.handle_complete_success_task(task_instance)
     except Exception as e:
-        logger.exception("Error during notifying rental about task completion: %s", e)
+        logger.exception(
+            "Error during notifying rental about task completion: %s", e.__class__
+        )
     return task_instance

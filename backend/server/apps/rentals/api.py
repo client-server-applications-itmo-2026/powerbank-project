@@ -22,6 +22,7 @@ def retrieve_rentals_by_user(request):
 def start_rental(request, data: domain_functions.StartRentalRequest):
     return domain_functions.start_rental(request.auth.user, data)
 
+
 @router.post("/complete-rental", tags=["rentals"], response=RentalSchema)
 def complete_rental(request, data: domain_functions.CompleteRentalRequest):
     return domain_functions.complete_rental(request.auth.user, data)
