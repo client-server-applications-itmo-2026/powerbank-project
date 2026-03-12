@@ -173,37 +173,59 @@ class TestStartRental:
             content_type="application/json",
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED
+        
+    def test_user_cannot_start_second_rental(
+        self,
+        client: Client,
+        user: UserModel,
+        stantion_with_charged_battery: RegisteredStantionModel,
+        tariff: TariffModel,
+    ) -> None:
+        client.post(
+            "/api/start-rental",
+            data={
+                "stantion_id": stantion_with_charged_battery.hardware_id,
+                "tariff_id": tariff.id,
+            },
+            content_type="application/json",
+            HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
+        )
+    
+        response = client.post(
+            "/api/start-rental",
+            data={
+                "stantion_id": stantion_with_charged_battery.hardware_id,
+                "tariff_id": tariff.id,
+            },
+            content_type="application/json",
+            HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
+        )
 
-@final
-@pytest.mark.django_db
-def test_user_cannot_start_second_rental(
-    self,
-    client: Client,
-    user: UserModel,
-    stantion_with_charged_battery: RegisteredStantionModel,
-    tariff: TariffModel,
-) -> None:
-    client.post(
-        "/api/start-rental",
-        data={
-            "stantion_id": stantion_with_charged_battery.hardware_id,
-            "tariff_id": tariff.id,
-        },
-        content_type="application/json",
-        HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
-    )
+        assert response.status_code in (HTTPStatus.CONFLICT, HTTPStatus.BAD_REQUEST)
 
-    response = client.post(
-        "/api/start-rental",
-        data={
-            "stantion_id": stantion_with_charged_battery.hardware_id,
-            "tariff_id": tariff.id,
-        },
-        content_type="application/json",
-        HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
-    )
+    def test_user_cannot_complete_rental_of_another_user(
+        self,
+        client: Client,
+        active_rental: RentalModel,
+        stantion: RegisteredStantionModel,
+    ) -> None:
+        other_user = UserModel.objects.create_user(
+            email="other@example.com",
+            password="pass123",
+        )
+    
+        response = client.post(
+            "/api/complete-rental",
+            data={
+                "rental_id": active_rental.id,
+                "stantion_id": stantion.hardware_id,
+            },
+            content_type="application/json",
+            HTTP_AUTHORIZATION=_auth_header(other_user.email, "pass123"),
+        )
+    
+        assert response.status_code in (HTTPStatus.NOT_FOUND, HTTPStatus.FORBIDDEN)
 
-    assert response.status_code in (HTTPStatus.CONFLICT, HTTPStatus.BAD_REQUEST)
 
 @final
 @pytest.mark.django_db
