@@ -40,11 +40,15 @@ INSTALLED_APPS: tuple[str, ...] = (
     # You may want to enable other checks as well,
     # see: https://github.com/KristianOellegaard/django-health-check
     "health_check",
+    # django-cors-headers:
+    "corsheaders",
 )
 
 MIDDLEWARE: tuple[str, ...] = (
     # Logging:
     "server.settings.components.logging.LoggingContextVarsMiddleware",
+    # django-cors-headers (must be before CommonMiddleware):
+    "corsheaders.middleware.CorsMiddleware",
     # Django:
     "django.middleware.security.SecurityMiddleware",
     # django-permissions-policy
@@ -57,6 +61,10 @@ MIDDLEWARE: tuple[str, ...] = (
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 )
+
+# django-cors-headers
+# https://github.com/adamchainz/django-cors-headers
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = "server.urls"
 

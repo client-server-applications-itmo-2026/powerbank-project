@@ -103,3 +103,7 @@ def complete_rental(user: UserModel, data: CompleteRentalRequest) -> RentalModel
     rental_instance.save()
 
     return rental_instance
+
+
+def get_tariffs() -> QuerySet[TariffModel]:
+    return TariffModel.objects.filter(is_active=True).order_by("price_per_tick")

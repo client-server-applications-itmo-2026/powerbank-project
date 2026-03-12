@@ -115,12 +115,15 @@ def create_stantion_hearbeat(
 
 
 def register_stantion(data: RegisterStantionRequest) -> RegisteredStantionModel:
-    return RegisteredStantionModel.objects.create(
+    instance, _ = RegisteredStantionModel.objects.get_or_create(
         hardware_id=data.hardware_id,
-        name=data.hardware_id,
-        location=data.location.as_geo_point(),
-        stantion_type_id=data.stantion_type_name,
+        defaults=dict(
+            name=data.hardware_id,
+            location=data.location.as_geo_point(),
+            stantion_type_id=data.stantion_type_name,
+        ),
     )
+    return instance
 
 
 def create_task(data: Any):

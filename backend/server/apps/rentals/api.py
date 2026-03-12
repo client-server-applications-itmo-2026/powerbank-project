@@ -2,7 +2,7 @@ from ninja import Router
 from ninja.pagination import LimitOffsetPagination, paginate
 
 from server.apps.rentals.logic import functions as domain_functions
-from server.apps.rentals.logic.response_schemas import RentalSchema
+from server.apps.rentals.logic.response_schemas import RentalSchema, TariffSchema
 
 router = Router()
 
@@ -26,3 +26,8 @@ def start_rental(request, data: domain_functions.StartRentalRequest):
 @router.post("/complete-rental", tags=["rentals"], response=RentalSchema)
 def complete_rental(request, data: domain_functions.CompleteRentalRequest):
     return domain_functions.complete_rental(request.auth, data)
+
+
+@router.get("/tariffs", tags=["rentals"], response=list[TariffSchema])
+def get_tariffs(request):
+    return domain_functions.get_tariffs()
