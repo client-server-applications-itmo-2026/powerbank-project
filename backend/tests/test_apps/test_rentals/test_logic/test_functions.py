@@ -355,6 +355,28 @@ class TestStartRental:
         with pytest.raises(DomainError, match="No charged batteries"):
             start_rental(user, data)
 
+    def test_selects_only_charged_battery(
+        self,
+        user: UserModel,
+        stantion: RegisteredStantionModel,
+        battery: RegisteredBatteryModel,
+        tariff: TariffModel,
+    ) -> None:
+        heartbeat = StantionHeartBeatModel.objects.create(registered_stantion=stantion)
+    
+        HeartBeatSlotStateModel.objects.create(
+            heartbeat=heartbeat,
+            state=SlotStateEnum.EMPTY,
+            slot_index=0,
+        )
+    
+        data = StartRentalRequest(
+            stantion_id=stantion.hardware_id,
+            tariff_id=tariff.id,
+        )
+    
+        with pytest.raises(DomainError, match="No charged batteries"):
+            start_rental(user, data)
 
 # ---------------------------------------------------------------------------
 # Tests: complete_rental
