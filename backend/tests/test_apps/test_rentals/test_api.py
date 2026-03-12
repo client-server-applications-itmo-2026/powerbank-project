@@ -246,3 +246,20 @@ class TestCompleteRental:
             HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
         )
         assert response.status_code == HTTPStatus.CONFLICT
+    def test_user_cannot_complete_rental_of_another_user(
+        self,
+        active_rental: RentalModel,
+        stantion: RegisteredStantionModel,
+    ) -> None:
+        other_user = UserModel.objects.create_user(
+            email="other@example.com",
+            password="pass",
+        )
+    
+        data = CompleteRentalRequest(
+            rental_id=active_rental.id,
+            stantion_id=stantion.hardware_id,
+        )
+    
+        with pytest.raises(DomainError):
+            complete_rental(other_user, data)
