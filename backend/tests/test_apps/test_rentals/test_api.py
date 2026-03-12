@@ -174,6 +174,36 @@ class TestStartRental:
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED
 
+@final
+@pytest.mark.django_db
+def test_user_cannot_start_second_rental(
+    self,
+    client: Client,
+    user: UserModel,
+    stantion_with_charged_battery: RegisteredStantionModel,
+    tariff: TariffModel,
+) -> None:
+    client.post(
+        "/api/start-rental",
+        data={
+            "stantion_id": stantion_with_charged_battery.hardware_id,
+            "tariff_id": tariff.id,
+        },
+        content_type="application/json",
+        HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
+    )
+
+    response = client.post(
+        "/api/start-rental",
+        data={
+            "stantion_id": stantion_with_charged_battery.hardware_id,
+            "tariff_id": tariff.id,
+        },
+        content_type="application/json",
+        HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
+    )
+
+    assert response.status_code in (HTTPStatus.CONFLICT, HTTPStatus.BAD_REQUEST)
 
 @final
 @pytest.mark.django_db
