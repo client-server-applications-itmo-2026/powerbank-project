@@ -12,6 +12,7 @@ export interface UserRetrieveResponse {
   is_superuser: boolean;
   date_joined: string;
   updated_at: string;
+  avatar_url: string | null;
 }
 
 export interface RegisterUserRequest {

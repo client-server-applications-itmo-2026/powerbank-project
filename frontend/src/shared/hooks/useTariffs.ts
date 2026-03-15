@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { rentalsApi } from '../api/rentals';
+import { getApiErrorMessage } from '../api/getErrorMessage';
 import type { TariffSchema } from '../types/api';
 
 export function useTariffs() {
@@ -12,7 +13,7 @@ export function useTariffs() {
     rentalsApi
       .getTariffs()
       .then((data) => setTariffs(data.filter((t) => t.is_active)))
-      .catch(() => setError('Не удалось загрузить тарифы'))
+      .catch((err) => setError(getApiErrorMessage(err, 'Не удалось загрузить тарифы')))
       .finally(() => setLoading(false));
   }, []);
 

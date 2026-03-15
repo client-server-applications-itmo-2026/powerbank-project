@@ -1,24 +1,26 @@
 .alert {
-  padding: 12px 14px;
-  border-radius: 8px;
+  padding: 14px 18px;
+  border-radius: 10px;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  border: 1px solid;
 }
 
 .error {
-  background: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
+  background: #fef1f1;
+  color: #b91c1c;
+  border-color: #fecaca;
 }
 
 .success {
   background: #f0fdf4;
-  color: #16a34a;
-  border: 1px solid #bbf7d0;
+  color: #15803d;
+  border-color: #bbf7d0;
 }
 
 .info {
   background: #eff6ff;
-  color: #2563eb;
-  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
 }

@@ -11,20 +11,37 @@ from server.common.exceptions import DomainError
 class PasswordIncorrectError(DomainError):
 
     def __init__(self, **context) -> None:
-        super().__init__("Passwords does not match", **context)
+        super().__init__("Passwords do not match", **context)
 
 
 class ProfileAlreadyExistsError(DomainError):
 
     def __init__(self, **idents) -> None:
-        super().__init__(f"Profile with idents: {idents} already existst", **idents)
+        if "email" in idents:
+            msg = "A profile with this email is already registered."
+        elif "phone_number" in idents:
+            msg = "A profile with this phone number is already registered."
+        else:
+            msg = f"A profile with these details already exists: {idents}"
+        super().__init__(msg, **idents)
 
 
 def update_user(
     data: UpdateAuthenticatedUserRequest, auth_user: UserModel
 ) -> UserModel:
     updated_data = data.model_dump(exclude_unset=True)
+    if "email" in updated_data and updated_data["email"]:
+        other = UserModel.objects.filter(email=updated_data["email"]).exclude(pk=auth_user.pk)
+        if other.exists():
+            raise ProfileAlreadyExistsError(email=updated_data["email"])
+    if "phone_number" in updated_data and updated_data["phone_number"]:
+        cleaned = _clean_phone_number(updated_data["phone_number"])
+        other = UserModel.objects.filter(phone_number=cleaned).exclude(pk=auth_user.pk)
+        if other.exists():
+            raise ProfileAlreadyExistsError(phone_number=cleaned)
     for field, value in updated_data.items():
+        if field == "phone_number" and value:
+            value = _clean_phone_number(value)
         setattr(auth_user, field, value)
     auth_user.save()
     return auth_user
@@ -38,7 +55,7 @@ def _clean_phone_number(phone_number: str) -> str:
 def register_user(data: RegisterUserRequest) -> UserModel:
 
     if data.password != data.re_password:
-        raise PasswordIncorrectError
+        raise PasswordIncorrectError()
 
     if UserModel.objects.filter(email=data.email).exists():
         ctx = {"email": data.email}

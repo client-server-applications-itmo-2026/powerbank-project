@@ -159,6 +159,11 @@ TEMPLATES = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR.joinpath("media")
 
+# Optional base URL for absolute media/avatar URLs in API responses.
+# Set when the frontend is on another origin (e.g. Vite proxy) so avatar URLs point to the backend.
+# Example: PUBLIC_BASE_URL=http://localhost:8000
+PUBLIC_BASE_URL = config("PUBLIC_BASE_URL", default="")
+
 
 # Django authentication system
 # https://docs.djangoproject.com/en/5.2/topics/auth/

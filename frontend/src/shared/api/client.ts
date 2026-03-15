@@ -48,10 +48,41 @@ async function request<T>(
   return res.json() as Promise<T>;
 }
 
+async function requestFormData<T>(
+  path: string,
+  formData: FormData,
+  withAuth = true,
+): Promise<T> {
+  const headers: Record<string, string> = {};
+  if (withAuth) {
+    const creds = loadCredentials();
+    if (creds) {
+      headers['Authorization'] = makeBasicAuthHeader(creds.email, creds.password);
+    }
+  }
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: 'POST',
+    body: formData,
+    headers,
+  });
+  if (!res.ok) {
+    let data: unknown;
+    try {
+      data = await res.json();
+    } catch {
+      data = { detail: res.statusText };
+    }
+    throw new ApiError(res.status, data);
+  }
+  return res.json() as Promise<T>;
+}
+
 export const apiClient = {
   get: <T>(path: string) => request<T>(path),
   post: <T>(path: string, body: unknown, withAuth = true) =>
     request<T>(path, { method: 'POST', body: JSON.stringify(body) }, withAuth),
+  postFormData: <T>(path: string, formData: FormData) =>
+    requestFormData<T>(path, formData),
   patch: <T>(path: string, body: unknown) =>
     request<T>(path, { method: 'PATCH', body: JSON.stringify(body) }),
 };

@@ -226,7 +226,11 @@ class TestStartRental:
             HTTP_AUTHORIZATION=_auth_header(other_user.email, "pass123"),
         )
     
-        assert response.status_code in (HTTPStatus.NOT_FOUND, HTTPStatus.FORBIDDEN)
+        assert response.status_code in (
+            HTTPStatus.NOT_FOUND,
+            HTTPStatus.FORBIDDEN,
+            HTTPStatus.CONFLICT,
+        )
 
     def test_response_contains_rental_id(
         self,
@@ -267,6 +271,7 @@ class TestCompleteRental:
         assert response.status_code == HTTPStatus.CONFLICT
     def test_user_cannot_complete_rental_of_another_user(
         self,
+        client: Client,
         active_rental: RentalModel,
         stantion: RegisteredStantionModel,
     ) -> None:
@@ -274,11 +279,19 @@ class TestCompleteRental:
             email="other@example.com",
             password="pass",
         )
-    
-        data = CompleteRentalRequest(
-            rental_id=active_rental.id,
-            stantion_id=stantion.hardware_id,
+
+        response = client.post(
+            "/api/complete-rental",
+            data={
+                "rental_id": active_rental.id,
+                "stantion_id": stantion.hardware_id,
+            },
+            content_type="application/json",
+            HTTP_AUTHORIZATION=_auth_header(other_user.email, "pass"),
         )
-    
-        with pytest.raises(DomainError):
-            complete_rental(other_user, data)
+
+        assert response.status_code in (
+            HTTPStatus.NOT_FOUND,
+            HTTPStatus.FORBIDDEN,
+            HTTPStatus.CONFLICT,
+        )

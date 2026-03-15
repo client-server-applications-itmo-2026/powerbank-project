@@ -75,7 +75,8 @@ export function MapPage() {
   const [activeRental, setActiveRental] = useState<RentalSchema | null>(null);
   const [didRecenter, setDidRecenter] = useState(false);
 
-  const mapCenter: [number, number] = lat != null && lon != null ? [lat, lon] : [55.7558, 37.6176];
+  const mapCenter: [number, number] =
+    lat != null && lon != null ? [lat, lon] : [55.7857, 37.6481];
 
   function handleStationClick(station: RetrieveNearestStantionsResponseItem) {
     if (completingRental) {
@@ -129,6 +130,7 @@ export function MapPage() {
           zoom={14}
           className={styles.map}
           zoomControl={true}
+          attributionControl={false}
         >
           {/* Recenter once when geolocation resolves */}
           {lat != null && lon != null && !didRecenter && (

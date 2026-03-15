@@ -2,7 +2,7 @@
 name = "backend"
 description = "Powerbank App backend"
 version = "0.1.0"
-requires-python = "==3.13.3"
+requires-python = "^3.13"
 readme = "README.md"
 authors = []
 dynamic = ["dependencies", "classifiers"]
@@ -36,6 +36,7 @@ structlog = "^25.4"
 wheel = "^0.46"
 django-ninja = "^1.5.3"
 django-cors-headers = "^4.9.0"
+Pillow = "^11.0"
 
 
 [tool.poetry.group.dev.dependencies]

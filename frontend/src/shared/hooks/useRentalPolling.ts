@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { rentalsApi } from '../api/rentals';
+import { getApiErrorMessage } from '../api/getErrorMessage';
 import type { RentalSchema } from '../types/api';
 
 function isCompleted(rental: RentalSchema): boolean {
@@ -49,8 +50,8 @@ export function useRentalPolling({
         stopRef.current = true;
         return;
       }
-    } catch {
-      setError('Не удалось получить статус аренды');
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Не удалось получить статус аренды'));
       setPolling(false);
       stopRef.current = true;
       return;

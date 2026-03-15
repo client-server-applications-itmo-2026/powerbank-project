@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { rentalsApi } from '../shared/api/rentals';
+import { getApiErrorMessage } from '../shared/api/getErrorMessage';
 import { AppLayout } from '../shared/ui/AppLayout';
 import { Alert } from '../shared/ui/Alert';
 import { ROUTES } from '../shared/constants/routes';
@@ -133,8 +134,8 @@ export function RentalsPage() {
         return new Date(b.started_at).getTime() - new Date(a.started_at).getTime();
       });
       setRentals(sorted);
-    } catch {
-      setError('Не удалось загрузить аренды');
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Не удалось загрузить аренды'));
     } finally {
       setLoading(false);
     }

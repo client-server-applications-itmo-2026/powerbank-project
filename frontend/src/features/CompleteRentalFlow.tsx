@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { rentalsApi } from '../shared/api/rentals';
 import { useRentalPolling } from '../shared/hooks/useRentalPolling';
-import { ApiError } from '../shared/api/client';
+import { getApiErrorMessage } from '../shared/api/getErrorMessage';
 import { Button } from '../shared/ui/Button';
 import { Alert } from '../shared/ui/Alert';
 import type { RentalSchema } from '../shared/types/api';
@@ -70,14 +70,7 @@ export function CompleteRentalFlow({ rental, preselectedStantionId, onClose, onC
         setStep('WAIT_FOR_COMPLETION');
       }
     } catch (err) {
-      if (err instanceof ApiError) {
-        const data = err.data as Record<string, unknown>;
-        setServerError(
-          typeof data?.detail === 'string' ? data.detail : 'Не удалось завершить аренду',
-        );
-      } else {
-        setServerError('Произошла ошибка. Попробуйте снова.');
-      }
+      setServerError(getApiErrorMessage(err, 'Не удалось завершить аренду'));
     }
   }
 
@@ -97,14 +90,7 @@ export function CompleteRentalFlow({ rental, preselectedStantionId, onClose, onC
         setStep('WAIT_FOR_COMPLETION');
       }
     } catch (err) {
-      if (err instanceof ApiError) {
-        const data = err.data as Record<string, unknown>;
-        setServerError(
-          typeof data?.detail === 'string' ? data.detail : 'Не удалось завершить аренду',
-        );
-      } else {
-        setServerError('Произошла ошибка. Попробуйте снова.');
-      }
+      setServerError(getApiErrorMessage(err, 'Не удалось завершить аренду'));
       setIsConfirming(false);
     }
   }

@@ -3,6 +3,7 @@ from http import HTTPStatus
 from typing import final
 
 import pytest
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 
 from server.apps.users.models import UserModel
@@ -128,10 +129,53 @@ class TestUpdateMe:
         assert response.status_code == HTTPStatus.OK
         assert response.json()["first_name"] == "Updated"
 
+    def test_update_duplicate_email_rejected(
+        self, client: Client, user: UserModel, db
+    ) -> None:
+        other = UserModel.objects.create_user(
+            email="other@example.com",
+            password="pass",
+            first_name="Other",
+            last_name="User",
+        )
+        response = client.patch(
+            "/api/me",
+            data={"email": other.email},
+            content_type="application/json",
+            HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
+        )
+        assert response.status_code == HTTPStatus.CONFLICT
+
     def test_unauthenticated(self, client: Client) -> None:
         response = client.patch(
             "/api/me",
             data={"first_name": "X"},
             content_type="application/json",
         )
+        assert response.status_code == HTTPStatus.UNAUTHORIZED
+
+
+@final
+@pytest.mark.django_db
+class TestUploadAvatar:
+    def test_upload_avatar_authenticated(self, client: Client, user: UserModel) -> None:
+        png_bytes = (
+            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01"
+            b"\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\x0f"
+            b"\x00\x00\x01\x01\x00\x05\x18\xd8N\x00\x00\x00\x00IEND\xaeB`\x82"
+        )
+        upload = SimpleUploadedFile("avatar.png", png_bytes, content_type="image/png")
+        response = client.post(
+            "/api/me/avatar",
+            {"file": upload},
+            format="multipart",
+            HTTP_AUTHORIZATION=_auth_header(user.email, "testpass123"),
+        )
+        assert response.status_code == HTTPStatus.OK
+        data = response.json()
+        assert "avatar_url" in data
+        assert data["avatar_url"] is not None
+
+    def test_upload_avatar_unauthenticated(self, client: Client) -> None:
+        response = client.post("/api/me/avatar", {}, format="multipart")
         assert response.status_code == HTTPStatus.UNAUTHORIZED

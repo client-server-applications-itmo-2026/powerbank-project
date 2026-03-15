@@ -21,6 +21,11 @@ export function useGeolocation(): GeolocationState {
       return;
     }
 
+    const options: PositionOptions = {
+      enableHighAccuracy: false,
+      timeout: 15000,
+      maximumAge: 60_000,
+    };
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setState({
@@ -33,7 +38,7 @@ export function useGeolocation(): GeolocationState {
       () => {
         setState({ lat: null, lon: null, error: 'Не удалось получить местоположение', loading: false });
       },
-      { enableHighAccuracy: true, timeout: 10000 },
+      options,
     );
   }, []);
 
