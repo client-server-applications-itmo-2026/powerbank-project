@@ -60,6 +60,12 @@ class UserModel(AbstractUser):
 
     is_stantion_admin = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
+    avatar = models.ImageField(
+        _("avatar"),
+        upload_to="avatars/%Y/%m/",
+        blank=True,
+        null=True,
+    )
 
     USERNAME_FIELD: ClassVar[str] = "email"
     REQUIRED_FIELDS: ClassVar[list[str]] = []

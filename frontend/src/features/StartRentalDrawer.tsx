@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { rentalsApi } from '../shared/api/rentals';
 import { useTariffs } from '../shared/hooks/useTariffs';
-import { ApiError } from '../shared/api/client';
+import { getApiErrorMessage } from '../shared/api/getErrorMessage';
 import { Button } from '../shared/ui/Button';
 import { Alert } from '../shared/ui/Alert';
 import type { RetrieveNearestStantionsResponseItem, RentalSchema, TariffSchema } from '../shared/types/api';
@@ -49,14 +49,7 @@ export function StartRentalDrawer({ station, onClose, onSuccess }: Props) {
       });
       onSuccess(rental);
     } catch (err) {
-      if (err instanceof ApiError) {
-        const data = err.data as Record<string, unknown>;
-        setServerError(
-          typeof data?.detail === 'string' ? data.detail : 'Не удалось начать аренду',
-        );
-      } else {
-        setServerError('Произошла ошибка. Попробуйте снова.');
-      }
+      setServerError(getApiErrorMessage(err, 'Не удалось начать аренду'));
     }
   }
 

@@ -15,3 +15,4 @@ class UserRetrieveResponse(Schema):
     is_superuser: bool
     date_joined: datetime.datetime
     updated_at: datetime.datetime
+    avatar_url: str | None = None

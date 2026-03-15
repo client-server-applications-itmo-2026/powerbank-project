@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { stantionsApi } from '../api/stantions';
+import { getApiErrorMessage } from '../api/getErrorMessage';
 import type { RetrieveNearestStantionsResponseItem } from '../types/api';
 
 interface UseStationsOptions {
@@ -37,8 +38,8 @@ export function useStations({
         radius_meters,
       });
       setStations(res.results);
-    } catch {
-      setError('Не удалось загрузить станции');
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Не удалось загрузить станции'));
     } finally {
       setLoading(false);
     }

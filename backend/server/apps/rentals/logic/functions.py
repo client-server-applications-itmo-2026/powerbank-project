@@ -26,9 +26,12 @@ from server.common.exceptions import DomainError
 
 def retrieve_rental_by_id(rental_id: int, auth_user: UserModel) -> RentalModel:
     try:
-        return RentalModel.objects.get(id=rental_id)
+        rental = RentalModel.objects.get(id=rental_id)
     except RentalModel.DoesNotExist:
         raise DomainError(f"Rental with id {rental_id} does not exist") from None
+    if rental.user_id != auth_user.id:
+        raise DomainError(f"Rental with id {rental_id} does not exist") from None
+    return rental
 
 
 def retrieve_rentals_by_user(user: UserModel) -> QuerySet[RentalModel]:
@@ -45,6 +48,11 @@ def retrieve_rentals_by_user(user: UserModel) -> QuerySet[RentalModel]:
 
 
 def start_rental(user: UserModel, data: StartRentalRequest) -> RentalModel:
+    if RentalModel.objects.filter(
+        user=user,
+        status__in=(RentalStatusEnum.INITIALIZING, RentalStatusEnum.ACTIVE),
+    ).exists():
+        raise DomainError("User already has an active rental") from None
     stantion_instance = RegisteredStantionModel.objects.get(
         hardware_id=data.stantion_id, is_active=True, is_deleted=False
     )
@@ -82,7 +90,12 @@ def count_price(tariff: TariffModel, rental_timedelta: datetime.timedelta) -> in
 
 
 def complete_rental(user: UserModel, data: CompleteRentalRequest) -> RentalModel:
-    rental_instance = RentalModel.objects.get(id=data.rental_id, user=user)
+    try:
+        rental_instance = RentalModel.objects.get(id=data.rental_id)
+    except RentalModel.DoesNotExist:
+        raise DomainError("Rental does not exist") from None
+    if rental_instance.user_id != user.id:
+        raise DomainError("Cannot complete another user's rental") from None
     if rental_instance.status != RentalStatusEnum.ACTIVE:
         raise DomainError("Only active rentals can be completed")
 

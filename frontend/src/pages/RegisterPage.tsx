@@ -7,6 +7,7 @@ import { usersApi } from '../shared/api/users';
 import { useAuthStore } from '../entities/auth/store';
 import { ROUTES } from '../shared/constants/routes';
 import { ApiError } from '../shared/api/client';
+import { getApiErrorMessage } from '../shared/api/getErrorMessage';
 import { Input } from '../shared/ui/Input';
 import { Button } from '../shared/ui/Button';
 import { Alert } from '../shared/ui/Alert';
@@ -56,16 +57,9 @@ export function RegisterPage() {
       await login(values.email, values.password);
       navigate(ROUTES.MAP, { replace: true });
     } catch (err) {
-      if (err instanceof ApiError) {
-        const data = err.data as Record<string, unknown>;
-        const detail =
-          typeof data?.detail === 'string'
-            ? data.detail
-            : 'Ошибка регистрации. Проверьте данные и попробуйте снова.';
-        setServerError(detail);
-      } else {
-        setServerError('Произошла ошибка. Попробуйте снова.');
-      }
+      setServerError(
+        getApiErrorMessage(err, 'Ошибка регистрации. Проверьте данные и попробуйте снова.'),
+      );
     }
   }
 

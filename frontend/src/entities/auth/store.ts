@@ -15,6 +15,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   restoreSession: () => Promise<void>;
+  setUser: (user: UserRetrieveResponse | null) => void;
 }
 
 // If credentials exist in localStorage, start in loading state so ProtectedRoute
@@ -58,6 +59,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ isLoading: false });
     }
   },
+
+  setUser: (user) => set({ user }),
 }));
 
 // Export helper for non-hook contexts (e.g. api client doesn't need it, 

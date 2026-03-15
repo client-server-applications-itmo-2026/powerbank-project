@@ -440,7 +440,7 @@ class TestCompleteRental:
     ) -> None:
         data = CompleteRentalRequest(rental_id=99999, stantion_id=stantion.hardware_id)
 
-        with pytest.raises(RentalModel.DoesNotExist):
+        with pytest.raises(DomainError, match="Rental does not exist"):
             complete_rental(user, data)
 
     def test_user_cannot_complete_rental_of_another_user(

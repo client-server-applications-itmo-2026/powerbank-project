@@ -30,6 +30,7 @@ from server.apps.stantions.models import (
     SlotStateEnum,
     StantionHeartBeatModel,
     StantionTaskModel,
+    StantionTypeModel,
     TaskStatusEnum,
 )
 from server.common.exceptions import DomainError
@@ -115,6 +116,7 @@ def create_stantion_hearbeat(
 
 
 def register_stantion(data: RegisterStantionRequest) -> RegisteredStantionModel:
+    # Ensure stantion type exists (FK required); create with defaults if missing.
     instance, _ = RegisteredStantionModel.objects.get_or_create(
         hardware_id=data.hardware_id,
         defaults=dict(
