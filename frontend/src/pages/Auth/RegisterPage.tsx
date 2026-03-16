@@ -3,15 +3,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { usersApi } from '../shared/api/users';
-import { useAuthStore } from '../entities/auth/store';
-import { ROUTES } from '../shared/constants/routes';
-import { ApiError } from '../shared/api/client';
-import { getApiErrorMessage } from '../shared/api/getErrorMessage';
-import { Input } from '../shared/ui/Input';
-import { Button } from '../shared/ui/Button';
-import { Alert } from '../shared/ui/Alert';
-import styles from './AuthPage.module.css';
+import { usersApi } from '../../shared/api/users';
+import { useAuthStore } from '../../entities/auth/store';
+import { ROUTES } from '../../shared/constants/routes';
+import { ApiError } from '../../shared/api/client';
+import { getApiErrorMessage } from '../../shared/api/getErrorMessage';
+import { Input } from '../../shared/ui/Input';
+import { Button } from '../../shared/ui/Button';
+import { Alert } from '../../shared/ui/Alert';
+import styles from './LoginPage.module.css';
+import { joinStyles } from '../../shared/utils/utils';
 
 const schema = z
   .object({
@@ -65,7 +66,7 @@ export function RegisterPage() {
 
   return (
     <div className={styles.page}>
-      <div className={[styles.card, styles.cardWide].join(' ')}>
+      <div className={joinStyles([styles.card, styles.cardWide])}>
         <div className={styles.logo}>⚡</div>
         <h1 className={styles.title}>Регистрация</h1>
         <p className={styles.subtitle}>Создайте аккаунт для аренды батареи</p>

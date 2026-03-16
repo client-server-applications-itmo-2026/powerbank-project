@@ -4,7 +4,7 @@ import {
   loadCredentials,
   clearCredentials,
   makeBasicAuthHeader,
-} from '../../shared/lib/basicAuth';
+} from '../../shared/auth_lib/basicAuth';
 import { usersApi } from '../../shared/api/users';
 import type { UserRetrieveResponse } from '../../shared/types/api';
 

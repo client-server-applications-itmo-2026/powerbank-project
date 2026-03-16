@@ -9,6 +9,7 @@ import { Button } from '../shared/ui/Button';
 import { Alert } from '../shared/ui/Alert';
 import type { RentalSchema } from '../shared/types/api';
 import styles from './CompleteRentalFlow.module.css';
+import { joinStyles } from '../shared/utils/utils';
 
 // ─── Steps ────────────────────────────────────────────────────────────────────
 // 1. SELECT_STATION  – user picks return station, submits → POST /api/complete-rental
@@ -153,7 +154,7 @@ export function CompleteRentalFlow({ rental, preselectedStantionId, onClose, onC
                   <div className={styles.field}>
                     <label className={styles.label}>ID станции возврата</label>
                     <input
-                      className={[styles.input, errors.stantion_id ? styles.inputError : ''].join(' ')}
+                      className={joinStyles([styles.input, errors.stantion_id ? styles.inputError : ''])}
                       placeholder="Например: STATION-001"
                       {...register('stantion_id')}
                     />

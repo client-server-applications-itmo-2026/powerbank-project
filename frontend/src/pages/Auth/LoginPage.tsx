@@ -2,15 +2,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../entities/auth/store';
-import { ROUTES } from '../shared/constants/routes';
-import { ApiError } from '../shared/api/client';
-import { getApiErrorMessage } from '../shared/api/getErrorMessage';
-import { Input } from '../shared/ui/Input';
-import { Button } from '../shared/ui/Button';
-import { Alert } from '../shared/ui/Alert';
+import { useAuthStore } from '../../entities/auth/store';
+import { ROUTES } from '../../shared/constants/routes';
+import { ApiError } from '../../shared/api/client';
+import { getApiErrorMessage } from '../../shared/api/getErrorMessage';
+import { Input } from '../../shared/ui/Input';
+import { Button } from '../../shared/ui/Button';
+import { Alert } from '../../shared/ui/Alert';
 import { useState } from 'react';
-import styles from './AuthPage.module.css';
+import styles from './LoginPage.module.css';
 
 const schema = z.object({
   email: z.string().min(1, 'Введите email').email('Некорректный email'),

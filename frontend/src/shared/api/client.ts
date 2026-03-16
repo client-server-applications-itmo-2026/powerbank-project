@@ -1,4 +1,4 @@
-import { loadCredentials, makeBasicAuthHeader } from '../lib/basicAuth';
+import { loadCredentials, makeBasicAuthHeader } from '../auth_lib/basicAuth';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 
@@ -14,25 +14,7 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(
-  path: string,
-  options: RequestInit = {},
-  withAuth = true,
-): Promise<T> {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...(options.headers as Record<string, string>),
-  };
-
-  if (withAuth) {
-    const creds = loadCredentials();
-    if (creds) {
-      headers['Authorization'] = makeBasicAuthHeader(creds.email, creds.password);
-    }
-  }
-
-  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
-
+async function parseResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
     let data: unknown;
     try {
@@ -44,8 +26,28 @@ async function request<T>(
   }
 
   if (res.status === 204) return undefined as T;
-
   return res.json() as Promise<T>;
+}
+
+function buildAuthHeaders(withAuth: boolean): Record<string, string> {
+  if (!withAuth) return {};
+  const creds = loadCredentials();
+  return creds ? { Authorization: makeBasicAuthHeader(creds) } : {};
+}
+
+async function request<T>(
+  path: string,
+  options: RequestInit = {},
+  withAuth = true,
+): Promise<T> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options.headers as Record<string, string>),
+    ...buildAuthHeaders(withAuth),
+  };
+
+  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+  return parseResponse<T>(res);
 }
 
 async function requestFormData<T>(
@@ -53,28 +55,13 @@ async function requestFormData<T>(
   formData: FormData,
   withAuth = true,
 ): Promise<T> {
-  const headers: Record<string, string> = {};
-  if (withAuth) {
-    const creds = loadCredentials();
-    if (creds) {
-      headers['Authorization'] = makeBasicAuthHeader(creds.email, creds.password);
-    }
-  }
+  const headers = buildAuthHeaders(withAuth);
   const res = await fetch(`${BASE_URL}${path}`, {
     method: 'POST',
     body: formData,
     headers,
   });
-  if (!res.ok) {
-    let data: unknown;
-    try {
-      data = await res.json();
-    } catch {
-      data = { detail: res.statusText };
-    }
-    throw new ApiError(res.status, data);
-  }
-  return res.json() as Promise<T>;
+  return parseResponse<T>(res);
 }
 
 export const apiClient = {

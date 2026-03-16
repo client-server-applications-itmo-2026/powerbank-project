@@ -3,13 +3,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useGeolocation } from '../shared/hooks/useGeolocation';
-import { useStations } from '../shared/hooks/useStations';
-import { StartRentalDrawer } from '../features/StartRentalDrawer';
-import { CompleteRentalFlow } from '../features/CompleteRentalFlow';
-import { AppLayout } from '../shared/ui/AppLayout';
-import { ROUTES } from '../shared/constants/routes';
-import type { RetrieveNearestStantionsResponseItem, RentalSchema } from '../shared/types/api';
+import { useGeolocation } from '../../shared/hooks/useGeolocation';
+import { useStations } from '../../shared/hooks/useStations';
+import { StartRentalDrawer } from '../../features/StartRentalDrawer';
+import { CompleteRentalFlow } from '../../features/CompleteRentalFlow';
+import { AppLayout } from '../../shared/ui/AppLayout';
+import { ROUTES } from '../../shared/constants/routes';
+import type { RetrieveNearestStantionsResponseItem, RentalSchema } from '../../shared/types/api';
 import styles from './MapPage.module.css';
 
 // Fix default Leaflet icon paths broken by bundlers

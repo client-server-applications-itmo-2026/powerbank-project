@@ -2,14 +2,14 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { AppLayout } from '../shared/ui/AppLayout';
-import { Button } from '../shared/ui/Button';
-import { Input } from '../shared/ui/Input';
-import { Alert } from '../shared/ui/Alert';
-import { usersApi } from '../shared/api/users';
-import { useAuthStore } from '../entities/auth/store';
-import { ApiError } from '../shared/api/client';
-import type { UserRetrieveResponse } from '../shared/types/api';
+import { AppLayout } from '../../shared/ui/AppLayout';
+import { Button } from '../../shared/ui/Button';
+import { Input } from '../../shared/ui/Input';
+import { Alert } from '../../shared/ui/Alert';
+import { usersApi } from '../../shared/api/users';
+import { useAuthStore } from '../../entities/auth/store';
+import { ApiError } from '../../shared/api/client';
+import type { UserRetrieveResponse } from '../../shared/types/api';
 import styles from './ProfilePage.module.css';
 
 /** Resolve avatar URL for img src. When using Vite proxy (no VITE_API_BASE_URL), use pathname so /media is proxied; otherwise use full URL or prepend base for relative paths. */
