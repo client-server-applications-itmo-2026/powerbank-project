@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { rentalsApi } from '../shared/api/rentals';
-import { getApiErrorMessage } from '../shared/api/getErrorMessage';
-import { AppLayout } from '../shared/ui/AppLayout';
-import { Alert } from '../shared/ui/Alert';
-import { ROUTES } from '../shared/constants/routes';
-import type { RentalSchema } from '../shared/types/api';
+import { rentalsApi } from '../../shared/api/rentals';
+import { getApiErrorMessage } from '../../shared/api/getErrorMessage';
+import { AppLayout } from '../../shared/ui/AppLayout';
+import { Alert } from '../../shared/ui/Alert';
+import { ROUTES } from '../../shared/constants/routes';
+import type { RentalSchema } from '../../shared/types/api';
 import styles from './RentalsPage.module.css';
-import { joinStyles } from '../shared/utils/utils';
+import { joinStyles } from '../../shared/utils/utils';
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString('ru-RU', {

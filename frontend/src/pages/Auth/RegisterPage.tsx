@@ -3,16 +3,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { usersApi } from '../shared/api/users';
-import { useAuthStore } from '../entities/auth/store';
-import { ROUTES } from '../shared/constants/routes';
-import { ApiError } from '../shared/api/client';
-import { getApiErrorMessage } from '../shared/api/getErrorMessage';
-import { Input } from '../shared/ui/Input';
-import { Button } from '../shared/ui/Button';
-import { Alert } from '../shared/ui/Alert';
-import styles from './AuthPage.module.css';
-import { joinStyles } from '../shared/utils/utils';
+import { usersApi } from '../../shared/api/users';
+import { useAuthStore } from '../../entities/auth/store';
+import { ROUTES } from '../../shared/constants/routes';
+import { ApiError } from '../../shared/api/client';
+import { getApiErrorMessage } from '../../shared/api/getErrorMessage';
+import { Input } from '../../shared/ui/Input';
+import { Button } from '../../shared/ui/Button';
+import { Alert } from '../../shared/ui/Alert';
+import styles from './LoginPage.module.css';
+import { joinStyles } from '../../shared/utils/utils';
 
 const schema = z
   .object({
