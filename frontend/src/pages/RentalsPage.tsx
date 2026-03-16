@@ -7,6 +7,7 @@ import { Alert } from '../shared/ui/Alert';
 import { ROUTES } from '../shared/constants/routes';
 import type { RentalSchema } from '../shared/types/api';
 import styles from './RentalsPage.module.css';
+import { joinStyles } from '../shared/utils/utils';
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString('ru-RU', {
@@ -44,13 +45,13 @@ function RentalCard({ rental, onComplete }: RentalCardProps) {
   };
 
   return (
-    <div className={[styles.card, isActive ? styles.cardActive : styles.cardDone].join(' ')}>
+    <div className={joinStyles([styles.card, isActive ? styles.cardActive : styles.cardDone])}>
       <div className={styles.cardTop}>
         <div className={styles.cardId}>
-          <span className={[styles.statusDot, isActive ? styles.dotActive : styles.dotDone].join(' ')} />
+          <span className={joinStyles([styles.statusDot, isActive ? styles.dotActive : styles.dotDone])} />
           Аренда #{rental.id}
         </div>
-        <span className={[styles.badge, isActive ? styles.badgeActive : styles.badgeDone].join(' ')}>
+        <span className={joinStyles([styles.badge, isActive ? styles.badgeActive : styles.badgeDone])}>
           {statusLabel[rental.status]}
         </span>
       </div>
@@ -95,7 +96,7 @@ function RentalCard({ rental, onComplete }: RentalCardProps) {
           {rental.final_price != null && (
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Итого</span>
-              <span className={[styles.infoValue, styles.price].join(' ')}>
+              <span className={joinStyles([styles.infoValue, styles.price])}>
                 {rental.final_price} ₽
               </span>
             </div>

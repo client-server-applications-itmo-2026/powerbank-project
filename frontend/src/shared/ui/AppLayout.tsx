@@ -1,11 +1,15 @@
+import type { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuthStore } from '../../entities/auth/store';
 import { ROUTES } from '../constants/routes';
 import styles from './AppLayout.module.css';
+import { joinStyles } from '../utils/utils';
 
-export function AppLayout({ children }: { children: React.ReactNode }) {
-  const logout = useAuthStore((s) => s.logout);
-  const user = useAuthStore((s) => s.user);
+export function AppLayout({ children }: { children: ReactNode }) {
+  const { logout, user } = useAuthStore((s) => ({
+    logout: s.logout,
+    user: s.user,
+  }));
 
   return (
     <div className={styles.shell}>
@@ -14,19 +18,19 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <nav className={styles.nav}>
           <NavLink
             to={ROUTES.MAP}
-            className={({ isActive }) => [styles.navLink, isActive ? styles.active : ''].join(' ')}
+            className={({ isActive }) => joinStyles([styles.navLink, isActive && styles.active])}
           >
             Карта
           </NavLink>
           <NavLink
             to={ROUTES.RENTALS}
-            className={({ isActive }) => [styles.navLink, isActive ? styles.active : ''].join(' ')}
+            className={({ isActive }) => joinStyles([styles.navLink, isActive && styles.active])}
           >
             Аренды
           </NavLink>
           <NavLink
             to={ROUTES.PROFILE}
-            className={({ isActive }) => [styles.navLink, isActive ? styles.active : ''].join(' ')}
+            className={({ isActive }) => joinStyles([styles.navLink, isActive && styles.active])}
           >
             {user ? user.first_name : 'Профиль'}
           </NavLink>

@@ -1,3 +1,4 @@
+import { joinStyles } from '../utils/utils';
 import styles from './Alert.module.css';
 
 interface AlertProps {
@@ -7,7 +8,7 @@ interface AlertProps {
 
 export function Alert({ type, message }: AlertProps) {
   return (
-    <div className={[styles.alert, styles[type]].join(' ')} role="alert">
+    <div className={joinStyles([styles.alert, styles[type]])} role="alert">
       {message}
     </div>
   );

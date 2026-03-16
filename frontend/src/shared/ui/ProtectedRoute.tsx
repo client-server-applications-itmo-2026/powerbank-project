@@ -3,8 +3,10 @@ import { useAuthStore } from '../../entities/auth/store';
 import { ROUTES } from '../constants/routes';
 
 export function ProtectedRoute() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const isLoading = useAuthStore((s) => s.isLoading);
+  const { isAuthenticated, isLoading } = useAuthStore((s) => ({
+    isAuthenticated: s.isAuthenticated,
+    isLoading: s.isLoading,
+  }));
 
   if (isLoading) {
     return (

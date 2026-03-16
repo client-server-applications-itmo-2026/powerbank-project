@@ -12,6 +12,7 @@ import { Input } from '../shared/ui/Input';
 import { Button } from '../shared/ui/Button';
 import { Alert } from '../shared/ui/Alert';
 import styles from './AuthPage.module.css';
+import { joinStyles } from '../shared/utils/utils';
 
 const schema = z
   .object({
@@ -65,7 +66,7 @@ export function RegisterPage() {
 
   return (
     <div className={styles.page}>
-      <div className={[styles.card, styles.cardWide].join(' ')}>
+      <div className={joinStyles([styles.card, styles.cardWide])}>
         <div className={styles.logo}>⚡</div>
         <h1 className={styles.title}>Регистрация</h1>
         <p className={styles.subtitle}>Создайте аккаунт для аренды батареи</p>

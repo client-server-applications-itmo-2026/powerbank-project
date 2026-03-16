@@ -9,6 +9,7 @@ import { Button } from '../shared/ui/Button';
 import { Alert } from '../shared/ui/Alert';
 import type { RetrieveNearestStantionsResponseItem, RentalSchema, TariffSchema } from '../shared/types/api';
 import styles from './StartRentalDrawer.module.css';
+import { joinStyles } from '../shared/utils/utils';
 
 const schema = z.object({
   tariff_id: z.string().min(1, 'Выберите тариф'),
@@ -58,7 +59,7 @@ export function StartRentalDrawer({ station, onClose, onSuccess }: Props) {
   return (
     <>
       {open && <div className={styles.overlay} onClick={onClose} />}
-      <div className={[styles.drawer, open ? styles.drawerOpen : ''].join(' ')}>
+      <div className={joinStyles([styles.drawer, open && styles.drawerOpen])}>
         <div className={styles.handle} />
 
         {station && (
@@ -78,10 +79,10 @@ export function StartRentalDrawer({ station, onClose, onSuccess }: Props) {
               <div className={styles.stationRow}>
                 <span className={styles.stationLabel}>Батареи</span>
                 <span
-                  className={[
+                  className={joinStyles([
                     styles.stationValue,
                     station.available_batteries > 0 ? styles.available : styles.unavailable,
-                  ].join(' ')}
+                  ])}
                 >
                   {station.available_batteries} доступно
                 </span>

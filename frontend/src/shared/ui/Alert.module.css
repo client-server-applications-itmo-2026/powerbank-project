@@ -5,6 +5,16 @@
   line-height: 1.5;
   margin-bottom: 16px;
   border: 1px solid;
+  opacity: 0;
+  transform: translateY(-8px);
+  animation: alertAppear 250ms ease-out forwards;
+}
+
+@keyframes alertAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .error {

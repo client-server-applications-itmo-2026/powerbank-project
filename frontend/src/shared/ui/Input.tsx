@@ -1,7 +1,8 @@
-import React from 'react';
+import type { InputHTMLAttributes } from 'react';
 import styles from './Input.module.css';
+import { joinStyles } from '../utils/utils';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
 }
@@ -17,7 +18,7 @@ export function Input({ label, error, id, className = '', ...props }: InputProps
       <input
         id={id}
         {...props}
-        className={[styles.input, error ? styles.inputError : '', className].join(' ')}
+        className={joinStyles([styles.input, error && styles.inputError, className])}
       />
       {error && <span className={styles.error}>{error}</span>}
     </div>

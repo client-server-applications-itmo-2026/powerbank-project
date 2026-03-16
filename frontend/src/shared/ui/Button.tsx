@@ -1,7 +1,8 @@
-import React from 'react';
+import type { ButtonHTMLAttributes } from 'react';
 import styles from './Button.module.css';
+import { joinStyles } from '../utils/utils';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost';
   isLoading?: boolean;
 }
@@ -18,7 +19,7 @@ export function Button({
     <button
       {...props}
       disabled={disabled || isLoading}
-      className={[styles.btn, styles[variant], className].join(' ')}
+      className={joinStyles([styles.btn, styles[variant], className])}
     >
       {isLoading ? <span className={styles.spinner} /> : children}
     </button>
