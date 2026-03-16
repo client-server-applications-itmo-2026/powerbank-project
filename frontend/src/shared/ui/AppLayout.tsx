@@ -6,10 +6,8 @@ import styles from './AppLayout.module.css';
 import { joinStyles } from '../utils/utils';
 
 export function AppLayout({ children }: { children: ReactNode }) {
-  const { logout, user } = useAuthStore((s) => ({
-    logout: s.logout,
-    user: s.user,
-  }));
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
 
   return (
     <div className={styles.shell}>

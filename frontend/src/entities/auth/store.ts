@@ -22,45 +22,45 @@ interface AuthState {
 // waits instead of immediately redirecting to /login before restoreSession runs.
 const hasSavedCreds = loadCredentials() !== null;
 
-export const useAuthStore = create<AuthState>((callback) => ({
+export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
   isLoading: hasSavedCreds,
 
   login: async (email: string, password: string) => {
-    callback({ isLoading: true });
+    set({ isLoading: true });
     try {
       // Temporarily save credentials so apiClient can use them
       saveCredentials({ email, password });
       const user = await usersApi.getMe();
-      callback({ user, isAuthenticated: true, isLoading: false });
+      set({ user, isAuthenticated: true, isLoading: false });
     } catch (err) {
       clearCredentials();
-      callback({ isLoading: false });
+      set({ isLoading: false });
       throw err;
     }
   },
 
   logout: () => {
     clearCredentials();
-    callback({ user: null, isAuthenticated: false });
+    set({ user: null, isAuthenticated: false });
   },
 
   restoreSession: async () => {
     const creds = loadCredentials();
     if (!creds) return;
-    callback({ isLoading: true });
+    set({ isLoading: true });
     try {
       const user = await usersApi.getMe();
-      callback({ user, isAuthenticated: true, isLoading: false });
+      set({ user, isAuthenticated: true, isLoading: false });
     } catch {
       // Stored credentials may be invalid — clean up silently
       clearCredentials();
-      callback({ isLoading: false });
+      set({ isLoading: false });
     }
   },
 
-  setUser: (user) => callback({ user }),
+  setUser: (user) => set({ user }),
 }));
 
 // Export helper for non-hook contexts (e.g. api client doesn't need it, 
